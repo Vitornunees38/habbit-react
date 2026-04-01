@@ -1,22 +1,39 @@
-import logo from './logo.svg';
 import './App.css';
+import Habit from './components/Habit';
+import {useState} from 'react'
 
 function App() {
+
+  let [habits, setHabits] = useState([
+    {id:1, name: "Workout", done: false},
+    {id:2, name: "Study", done: true},
+    {id:3, name: "Drink water", done: false},
+    {id:4, name: "Run 5km", done: false}
+  ])
+
+  const toggleDone = (id) => {
+    setHabits((prevHabits) =>
+      prevHabits.map((habit) => 
+        habit.id === id ? {...habit, done: !habit.done} : habit
+      ))
+  }
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h1>Welcome back!</h1>
+
+        <div>
+        <ul className="no-bullets">
+            {habits.map((habit) => (
+                <li key={habit.id}>
+                  <Habit habit={habit} toggle={toggleDone}/>
+                </li>
+            ))}
+        </ul>
+        <button>+ Add Habit</button>
+    </div>
+
       </header>
     </div>
   );
