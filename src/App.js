@@ -5,12 +5,15 @@ import Counter from './components/Counter';
 
 function App() {
 
-  let [habits, setHabits] = useState([
-    {id:1, name: "Workout", done: false},
-    {id:2, name: "Study", done: true},
-    {id:3, name: "Drink water", done: false},
-    {id:4, name: "Run 5km", done: false}
-  ])
+  const [habits, setHabits] = useState(() => {
+    const savedHabits = localStorage.getItem('habits');
+    return savedHabits ? JSON.parse(savedHabits) : [
+      {id:1, name: "Workout", done: false},
+      {id:2, name: "Study", done: true},
+      {id:3, name: "Drink water", done: false},
+      {id:4, name: "Run 5km", done: false}
+    ];
+  });
 
   let [doneCount, setDoneCount] = useState(0)
   let [totalCount, setTotalCount] = useState(0)
@@ -21,6 +24,10 @@ function App() {
   
     setDoneCount(done);
     setTotalCount(total);
+  }, [habits]);
+
+  useEffect(() => {
+    localStorage.setItem('habits', JSON.stringify(habits));
   }, [habits]);
 
   const toggleDone = (id) => {
