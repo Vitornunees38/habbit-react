@@ -16,3 +16,14 @@ code {
   list-style: none;
   padding-left: 0px;
 }
+
+.habit-div{
+  border: #353a44 solid 2px ;
+  padding: 10px;
+  margin: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-radius: 10px;
+  gap: 10px;
+}

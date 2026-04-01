@@ -1,6 +1,7 @@
 import './App.css';
 import Habit from './components/Habit';
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
+import Counter from './components/Counter';
 
 function App() {
 
@@ -11,6 +12,17 @@ function App() {
     {id:4, name: "Run 5km", done: false}
   ])
 
+  let [doneCount, setDoneCount] = useState(0)
+  let [totalCount, setTotalCount] = useState(0)
+
+  useEffect(() => {
+    const done = habits.filter(h => h.done).length;
+    const total = habits.length;
+  
+    setDoneCount(done);
+    setTotalCount(total);
+  }, [habits]);
+
   const toggleDone = (id) => {
     setHabits((prevHabits) =>
       prevHabits.map((habit) => 
@@ -18,20 +30,60 @@ function App() {
       ))
   }
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const form = e.target;
+    const name = form.name.value;
+
+    if (!name.trim()) return; // evita vazio
+
+    const newHabit = {
+      id: Date.now(), // id simples
+      name: name,
+      done: false
+    };
+
+    setHabits((prevHabits) => [
+      ...prevHabits,
+      newHabit
+    ]);
+
+    form.reset();
+  }
+
+  const handleDelete = (habitToDelete) => {
+
+    setHabits((prevHabits) =>
+      prevHabits.filter((habit) => habit.id !== habitToDelete.id)
+    );
+
+  }
+
+
   return (
     <div className="App">
       <header className="App-header">
         <h1>Welcome back!</h1>
 
+        <Counter doneCount = {doneCount} totalCount={totalCount}/>
+
         <div>
         <ul className="no-bullets">
             {habits.map((habit) => (
                 <li key={habit.id}>
-                  <Habit habit={habit} toggle={toggleDone}/>
+                  <Habit habit={habit} toggle={toggleDone} deleteHabit={handleDelete}/>
                 </li>
             ))}
         </ul>
-        <button>+ Add Habit</button>
+        <form onSubmit = {handleSubmit}>
+          <label>
+            New Habit:
+            <input type="text" name="name" />
+          </label>
+          
+          <input type="submit" value="+ Add Habit"/>
+        </form>
     </div>
 
       </header>
