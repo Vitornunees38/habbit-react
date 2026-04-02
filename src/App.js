@@ -3,6 +3,8 @@ import Habit from './components/Habit';
 import {useState, useEffect} from 'react'
 import Counter from './components/Counter';
 
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
 function App() {
 
   const [habits, setHabits] = useState(() => {
@@ -76,6 +78,7 @@ function App() {
         <Counter doneCount = {doneCount} totalCount={totalCount}/>
 
         <div>
+        <BrowserRouter>
         <ul className="no-bullets">
             {habits.map((habit) => (
                 <li key={habit.id}>
@@ -83,6 +86,7 @@ function App() {
                 </li>
             ))}
         </ul>
+        </BrowserRouter>
         <form onSubmit = {handleSubmit}>
           <label>
             New Habit:
