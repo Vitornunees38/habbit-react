@@ -1,8 +1,9 @@
 import React from 'react'
+import "./Counter.css"
 
 const Counter = ({doneCount, totalCount}) => {
   return (
-    <div>{doneCount}/{totalCount} habits concluded today!</div>
+    <div className="progress">{doneCount}/{totalCount} habits concluded today!</div>
   )
 }
 

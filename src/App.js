@@ -2,6 +2,7 @@ import './App.css';
 import Habit from './components/Habit';
 import {useState, useEffect} from 'react'
 import Counter from './components/Counter';
+import CreateHabit from './pages/CreateHabit';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
@@ -79,6 +80,9 @@ function App() {
 
         <div>
         <BrowserRouter>
+        <Routes>
+          <Route path="/create" element={<CreateHabit/>}/>
+        </Routes>
         <ul className="no-bullets">
             {habits.map((habit) => (
                 <li key={habit.id}>
