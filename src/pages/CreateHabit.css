@@ -1,0 +1,27 @@
+.create-button{
+    color: black;
+    padding: 8px 15px;
+    border-radius: 10px;
+    text-decoration: none;
+    background-color: azure;
+    transition: all 0.2s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.create-button:hover {
+    transform: scale(1.03);
+    background-color: rgb(207, 219, 219);
+}
+
+.create-button:active {
+    transform: scale(0.98);
+    background-color: rgb(183, 193, 193);
+}
+
+.create-form-input{
+    padding: 10px 15px;
+    border-radius: 10px;
+    border: none;
+}
+

@@ -1,0 +1,13 @@
+.add-button{
+    color: black;
+    padding: 8px 17px;
+    border-radius: 10px;
+    text-decoration: none;
+    background-color: azure;
+    transition: all 0.2s ease;
+}
+
+.add-button:hover {
+    padding: 8.8px 18.7px;
+    background-color: rgb(201, 215, 215);
+}

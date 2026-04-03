@@ -40,12 +40,8 @@ function App() {
       }
 
       const handleSubmit = (e) => {
-        e.preventDefault();
-    
         const form = e.target;
         const name = form.name.value;
-    
-        if (!name.trim()) return; // evita vazio
     
         const newHabit = {
           id: Date.now(), // id simples
@@ -68,7 +64,7 @@ function App() {
         <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home habits={habits} toggleDone={toggleDone}  handleDelete={handleDelete} handleSubmit={handleSubmit}/>}/>
-          <Route path="/create" element={<CreateHabit/>}/>
+          <Route path="/create" element={<CreateHabit handleSubmit={handleSubmit}/>}/>
           <Route path="/habit/:id" element={<HabitPage habits={habits}/>}/>
         </Routes>
         </BrowserRouter>

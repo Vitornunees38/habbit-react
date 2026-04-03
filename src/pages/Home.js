@@ -2,7 +2,8 @@ import React from 'react'
 import Habit from '../components/Habit';
 import {useState, useEffect} from 'react'
 import Counter from '../components/Counter';
-
+import {Link} from 'react-router-dom'
+import './Home.css'
 const Home = ({habits, toggleDone, handleDelete, handleSubmit}) => {
     
     let [doneCount, setDoneCount] = useState(0)
@@ -30,14 +31,7 @@ const Home = ({habits, toggleDone, handleDelete, handleSubmit}) => {
             ))}
         </ul>
 
-        <form onSubmit = {handleSubmit}>
-          <label>
-            New Habit:
-            <input type="text" name="name" />
-          </label>
-          
-          <input type="submit" value="+ Add Habit"/>
-        </form>
+        <Link className='add-button' to={'/create'}> + </Link>
     </div>
   )
 }
