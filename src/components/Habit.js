@@ -4,14 +4,10 @@ import "./Habit.css"
 
 const Habit = ({habit, toggle, deleteHabit}) => {
 
-  let url = "/" + habit.id
-
-  console.log(url)
-
   return (
     <div className = "habit-div">
         <input type="checkbox" id={habit.id} checked={habit.done} onChange={()=>toggle(habit.id)}/>
-          <Link to={url}>{habit.name}</Link>
+          <Link to={`/habit/${habit.id}`}>{habit.name}</Link>
         <button className="delete-button" onClick={()=>deleteHabit(habit)}>
           <svg xmlns="http://www.w3.org/2000/svg" 
               width="16" height="16" 

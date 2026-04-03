@@ -1,10 +1,11 @@
 import './App.css';
-import Habit from './components/Habit';
-import {useState, useEffect} from 'react'
 import Counter from './components/Counter';
 import CreateHabit from './pages/CreateHabit';
+import HabitPage from './pages/HabitPage';
 
+import {useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
 
 function App() {
 
@@ -18,90 +19,61 @@ function App() {
     ];
   });
 
-  let [doneCount, setDoneCount] = useState(0)
-  let [totalCount, setTotalCount] = useState(0)
+    
+      useEffect(() => {
+        localStorage.setItem('habits', JSON.stringify(habits));
+      }, [habits]);
+    
+      const toggleDone = (id) => {
+        setHabits((prevHabits) =>
+          prevHabits.map((habit) => 
+            habit.id === id ? {...habit, done: !habit.done} : habit
+          ))
+      }
 
-  useEffect(() => {
-    const done = habits.filter(h => h.done).length;
-    const total = habits.length;
-  
-    setDoneCount(done);
-    setTotalCount(total);
-  }, [habits]);
+      const handleDelete = (habitToDelete) => {
 
-  useEffect(() => {
-    localStorage.setItem('habits', JSON.stringify(habits));
-  }, [habits]);
+        setHabits((prevHabits) =>
+          prevHabits.filter((habit) => habit.id !== habitToDelete.id)
+        );
+    
+      }
 
-  const toggleDone = (id) => {
-    setHabits((prevHabits) =>
-      prevHabits.map((habit) => 
-        habit.id === id ? {...habit, done: !habit.done} : habit
-      ))
-  }
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const form = e.target;
-    const name = form.name.value;
-
-    if (!name.trim()) return; // evita vazio
-
-    const newHabit = {
-      id: Date.now(), // id simples
-      name: name,
-      done: false
-    };
-
-    setHabits((prevHabits) => [
-      ...prevHabits,
-      newHabit
-    ]);
-
-    form.reset();
-  }
-
-  const handleDelete = (habitToDelete) => {
-
-    setHabits((prevHabits) =>
-      prevHabits.filter((habit) => habit.id !== habitToDelete.id)
-    );
-
-  }
-
+      const handleSubmit = (e) => {
+        e.preventDefault();
+    
+        const form = e.target;
+        const name = form.name.value;
+    
+        if (!name.trim()) return; // evita vazio
+    
+        const newHabit = {
+          id: Date.now(), // id simples
+          name: name,
+          done: false
+        };
+    
+        setHabits((prevHabits) => [
+          ...prevHabits,
+          newHabit
+        ]);
+    
+        form.reset();
+      }
 
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>Welcome back!</h1>
-
-        <Counter doneCount = {doneCount} totalCount={totalCount}/>
-
+      <div className="App-header">
         <div>
         <BrowserRouter>
         <Routes>
+          <Route path="/" element={<Home habits={habits} toggleDone={toggleDone}  handleDelete={handleDelete} handleSubmit={handleSubmit}/>}/>
           <Route path="/create" element={<CreateHabit/>}/>
+          <Route path="/habit/:id" element={<HabitPage habits={habits}/>}/>
         </Routes>
-        <ul className="no-bullets">
-            {habits.map((habit) => (
-                <li key={habit.id}>
-                  <Habit habit={habit} toggle={toggleDone} deleteHabit={handleDelete}/>
-                </li>
-            ))}
-        </ul>
         </BrowserRouter>
-        <form onSubmit = {handleSubmit}>
-          <label>
-            New Habit:
-            <input type="text" name="name" />
-          </label>
-          
-          <input type="submit" value="+ Add Habit"/>
-        </form>
     </div>
-
-      </header>
+    </div>
     </div>
   );
 }
