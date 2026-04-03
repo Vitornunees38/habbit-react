@@ -6,8 +6,15 @@ const Habit = ({habit, toggle, deleteHabit}) => {
 
   return (
     <div className = "habit-div">
-        <input type="checkbox" id={habit.id} checked={habit.done} onChange={()=>toggle(habit.id)}/>
-          <Link to={`/habit/${habit.id}`}>{habit.name}</Link>
+        <label className="custom-checkbox">
+          <input
+            type="checkbox"
+            checked={habit.done}
+            onChange={() => toggle(habit.id)}
+          />
+          <span className="checkmark"></span>
+        </label>
+          <Link to={`/habit/${habit.id}`} className={habit.done ? "habit-name done" : "habit-name"}>{habit.name}</Link>
         <button className="delete-button" onClick={()=>deleteHabit(habit)}>
           <svg xmlns="http://www.w3.org/2000/svg" 
               width="16" height="16" 
@@ -21,3 +28,4 @@ const Habit = ({habit, toggle, deleteHabit}) => {
 }
 
 export default Habit
+
