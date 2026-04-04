@@ -12,10 +12,10 @@ function App() {
   const [habits, setHabits] = useState(() => {
     const savedHabits = localStorage.getItem('habits');
     return savedHabits ? JSON.parse(savedHabits) : [
-      {id:1, name: "Workout", done: false},
-      {id:2, name: "Study", done: true},
-      {id:3, name: "Drink water", done: false},
-      {id:4, name: "Run 5km", done: false}
+      {id:1, name: "Workout", decription:"", done: false},
+      {id:2, name: "Study", decription:"", done: true},
+      {id:3, name: "Drink water", decription:"", done: false},
+      {id:4, name: "Run 5km", decription:"", done: false}
     ];
   });
 
@@ -39,22 +39,25 @@ function App() {
     
       }
 
-      const handleSubmit = (e) => {
-        const form = e.target;
-        const name = form.name.value;
+      const handleSubmit = ({id, name, description, edit}) => {
     
         const newHabit = {
-          id: Date.now(), // id simples
+          id: id, // id simples
           name: name,
+          description: description,
           done: false
         };
-    
+        
+        if (edit) {
+          handleDelete(newHabit)
+        }
+        
+        
         setHabits((prevHabits) => [
           ...prevHabits,
           newHabit
         ]);
     
-        form.reset();
       }
 
   return (
