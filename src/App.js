@@ -12,24 +12,38 @@ function App() {
   const [habits, setHabits] = useState(() => {
     const savedHabits = localStorage.getItem('habits');
     return savedHabits ? JSON.parse(savedHabits) : [
-      {id:1, name: "Workout", decription:"", done: false},
-      {id:2, name: "Study", decription:"", done: true},
-      {id:3, name: "Drink water", decription:"", done: false},
-      {id:4, name: "Run 5km", decription:"", done: false}
+      {id:1, name: "Workout", description:"", completedDates:[]},
+      {id:2, name: "Study", description:"", completedDates:[]},
+      {id:3, name: "Drink water", description:"", completedDates:[]},
+      {id:4, name: "Run 5km", description:"", completedDates:[]}
     ];
   });
 
-    
+      const getToday = () => new Date().toISOString().split("T")[0];
+
       useEffect(() => {
         localStorage.setItem('habits', JSON.stringify(habits));
       }, [habits]);
     
       const toggleDone = (id) => {
+
+        const today = getToday();
+
         setHabits((prevHabits) =>
-          prevHabits.map((habit) => 
-            habit.id === id ? {...habit, done: !habit.done} : habit
-          ))
-      }
+        prevHabits.map((habit) => {
+          if (habit.id !== id) return habit;
+
+          const alreadyDone = habit.completedDates.includes(today);
+
+          return {
+            ...habit,
+            completedDates: alreadyDone
+              ? habit.completedDates.filter(date => date !== today) // remove
+              : [...habit.completedDates, today] // add
+          };
+        })
+      );
+    };
 
       const handleDelete = (habitToDelete) => {
 
@@ -45,7 +59,8 @@ function App() {
           id: id, // id simples
           name: name,
           description: description,
-          done: false
+          done: false,
+          completedDates: []
         };
         
         if (edit) {

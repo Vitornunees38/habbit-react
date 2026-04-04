@@ -4,12 +4,15 @@ import "./Habit.css"
 
 const Habit = ({habit, toggle, deleteHabit}) => {
 
+  const today = new Date().toISOString().split("T")[0];
+  const isDoneToday = habit.completedDates.includes(today);
+
   return (
     <div className = "habit-div">
         <label className="custom-checkbox">
           <input
             type="checkbox"
-            checked={habit.done}
+            checked={habit.isDoneToday}
             onChange={() => toggle(habit.id)}
           />
           <span className="checkmark"></span>
