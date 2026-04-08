@@ -19,6 +19,7 @@ function App() {
     ];
   });
 
+
       const getToday = () => new Date().toISOString().split("T")[0];
 
       useEffect(() => {
@@ -59,7 +60,6 @@ function App() {
           id: id, // id simples
           name: name,
           description: description,
-          done: false,
           completedDates: []
         };
         

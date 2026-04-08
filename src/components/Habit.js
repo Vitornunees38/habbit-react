@@ -12,12 +12,12 @@ const Habit = ({habit, toggle, deleteHabit}) => {
         <label className="custom-checkbox">
           <input
             type="checkbox"
-            checked={habit.isDoneToday}
+            checked={isDoneToday}
             onChange={() => toggle(habit.id)}
           />
           <span className="checkmark"></span>
         </label>
-          <Link to={`/habit/${habit.id}`} className={habit.done ? "habit-name done" : "habit-name"}>{habit.name}</Link>
+          <Link to={`/habit/${habit.id}`} className={isDoneToday ? "habit-name done" : "habit-name"}>{habit.name}</Link>
         <button className="delete-button" onClick={()=>deleteHabit(habit)}>
           <svg xmlns="http://www.w3.org/2000/svg" 
               width="16" height="16" 

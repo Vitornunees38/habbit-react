@@ -31,7 +31,7 @@ const CreateHabit = ({handleSubmit}) => {
   };
 
   return (
-    <div>
+    <div className="create-habit-div">
       <form onSubmit={onSubmit}>
            <label>
             Habit Name:
