@@ -9,44 +9,50 @@ import Home from './pages/Home';
 
 function App() {
 
-  const [habits, setHabits] = useState(() => {
-    const savedHabits = localStorage.getItem('habits');
-    return savedHabits ? JSON.parse(savedHabits) : [
-      {id:1, name: "Workout", description:"", completedDates:[]},
-      {id:2, name: "Study", description:"", completedDates:[]},
-      {id:3, name: "Drink water", description:"", completedDates:[]},
-      {id:4, name: "Run 5km", description:"", completedDates:[]}
-    ];
-  });
+  const [habits, setHabits] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:8080/habits")
+      .then(res => res.json())
+      .then(data => setHabits(data));
+  }, []);
 
 
       const getToday = () => new Date().toISOString().split("T")[0];
 
-      useEffect(() => {
-        localStorage.setItem('habits', JSON.stringify(habits));
-      }, [habits]);
     
-      const toggleDone = (id) => {
-
+      const toggleDone = async (id) => {
         const today = getToday();
+      
+        const habit = habits.find(h => h.id === id);
+      
+        const alreadyDone = habit.completedDates.includes(today);
+      
+        const updatedHabit = {
+          ...habit,
+          completedDates: alreadyDone
+            ? habit.completedDates.filter(date => date !== today)
+            : [...habit.completedDates, today]
+        };
+      
+        await fetch(`http://localhost:8080/habits/${id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(updatedHabit)
+        });
+      
+        setHabits(prev =>
+          prev.map(h => (h.id === id ? updatedHabit : h))
+        );
+      };
 
-        setHabits((prevHabits) =>
-        prevHabits.map((habit) => {
-          if (habit.id !== id) return habit;
+      const handleDelete = async (habitToDelete) => {
 
-          const alreadyDone = habit.completedDates.includes(today);
-
-          return {
-            ...habit,
-            completedDates: alreadyDone
-              ? habit.completedDates.filter(date => date !== today) // remove
-              : [...habit.completedDates, today] // add
-          };
-        })
-      );
-    };
-
-      const handleDelete = (habitToDelete) => {
+        await fetch(`http://localhost:8080/habits/${habitToDelete.id}`, {
+          method: "DELETE"
+        });
 
         setHabits((prevHabits) =>
           prevHabits.filter((habit) => habit.id !== habitToDelete.id)
@@ -54,24 +60,36 @@ function App() {
     
       }
 
-      const handleSubmit = ({id, name, description, edit}) => {
-    
+      const handleSubmit = async ({id, name, description, edit}) => {
+        
+        const existingHabit = habits.find(h => h.id === id);
+
         const newHabit = {
           id: id, // id simples
           name: name,
           description: description,
-          completedDates: []
+          completedDates: edit ? existingHabit.completedDates : []
         };
         
+        const url = edit ? `http://localhost:8080/habits/${id}` : "http://localhost:8080/habits"
+
+        const response = await fetch(url, {
+          method: edit ? "PUT" : "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(newHabit)
+        });
+      
+        const savedHabit = await response.json();
+      
         if (edit) {
-          handleDelete(newHabit)
+          setHabits(prev =>
+            prev.map(h => (h.id === savedHabit.id ? savedHabit : h))
+          );
+        } else {
+          setHabits(prev => [...prev, savedHabit]);
         }
-        
-        
-        setHabits((prevHabits) => [
-          ...prevHabits,
-          newHabit
-        ]);
     
       }
 
