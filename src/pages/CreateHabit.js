@@ -20,7 +20,7 @@ const CreateHabit = ({handleSubmit}) => {
 
     if (name.trim()) {
       handleSubmit({
-        id: habitToEdit ? habitToEdit.id : Date.now(),
+        id: habitToEdit ? habitToEdit.id : null,
         name,
         description,
         edit
